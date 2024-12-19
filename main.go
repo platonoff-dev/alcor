@@ -19,11 +19,11 @@ func (this *TreeShapeListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
 }
 
 func main() {
-	input := antlr.NewInputStream("1234")
+	input := antlr.NewInputStream("1 + 0xA")
 	lexer := parser.NewAlcorLexer(input)
-
-	tokenStream := antlr.NewCommonTokenStream(lexer, 0)
-
-	p := parser.NewAlcorParser(tokenStream)
+	stream := antlr.NewCommonTokenStream(lexer, 0)
+	p := parser.NewAlcorParser(stream)
 	p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
+	tree := p.Prog()
+	antlr.ParseTreeWalkerDefault.Walk(NewTreeShapeListener(), tree)
 }
